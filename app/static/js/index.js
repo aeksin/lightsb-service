@@ -329,6 +329,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const form = document.getElementById("generator-form")
     const imageInput = document.getElementById("image-upload")
+    const modelSelect = document.getElementById("model-select")
     const loadingText = document.getElementById("loading-text")
     const resultHeader = document.querySelector(".result-header")
     const generatedImagesContainer = document.getElementById("generated-images")
@@ -423,8 +424,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     form.addEventListener("submit", async (event) => {
       event.preventDefault()
 
+      const selectedModel = modelSelect.value;
+
       if (!imageInput.files.length) {
         alert("Please upload an image first.")
+        return
+      }
+
+      if (!selectedModel) {
+        alert("Please select a model first.")
         return
       }
 
@@ -442,6 +450,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const formData = new FormData()
       formData.append("file", imageInput.files[0])
+      formData.append("model", selectedModel)
+
+      console.log("selected model is",selectedModel)
 
       let f = 0
       let len = 0
@@ -469,7 +480,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Hide loading text
         loadingText.style.display = "none"
 
-        if (result.image_urls.length === 1) {
+        if (result.image_urls.length === 0) {
           alert("No heads were detected in the given image.")
         } else {
           // Store image URLs for download functionality

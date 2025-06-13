@@ -11,3 +11,8 @@ torchvision
 scikit-learn
 yacs
 matplotlib
+accelerate
+geotorch
+diffusers
+transformers
+compel
