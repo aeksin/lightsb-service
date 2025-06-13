@@ -12,6 +12,7 @@ from fastapi import (
     APIRouter,
     Depends,
     File,
+    Form,
     HTTPException,
     Request,
     Response,
@@ -271,8 +272,7 @@ def update_stats(
 
 
 @router.post("/generate", response_model=UserStats)
-async def generate_images(file: UploadFile = File(...)):
-
+async def generate_images(file: UploadFile = File(...), model: str = Form(...)):
     try:
         folder_path_generated = "app/static/generated"
 
@@ -289,10 +289,10 @@ async def generate_images(file: UploadFile = File(...)):
             f.write(image_data)
 
         output_dir = os.path.join(folder_path_generated)
-        generated_images = aging_pipeline(input_path, output_dir)
+        generated_images = aging_pipeline(input_path, output_dir, model)
         if not generated_images:
             raise NoGeneratedImagesError
-        elif len(generated_images) == 1:
+        elif len(generated_images) == 0:
             return JSONResponse(content={"image_urls": generated_images})
 
         clean_paths = [path.replace("app/", "", 1) for path in generated_images]
