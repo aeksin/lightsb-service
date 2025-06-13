@@ -14,6 +14,10 @@ RUN apt-get update && \
     pip install --no-cache-dir opencv-python ultralytics && \
     rm -rf ~/.cache/pip
 
+RUN pip install gdown
+
+RUN gdown --fuzzy https://drive.google.com/file/d/1CMjQWdy6xzo6XiLbGBmbwx1ROxzaxs9G/view?usp=drive_link -O ./models/sb_checkpoints/stddiff.ckpt
+
 COPY ./models ./models
 
 ENV PYTHONPATH="./:./app:./models"
